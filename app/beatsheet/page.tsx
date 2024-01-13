@@ -14,7 +14,7 @@ export default async function Page() {
     .select("*")
     .limit(1);
 
-  const acts: Act[] = beatsheets[0].acts;
+  const acts: Act[] = beatsheets?.[0].acts ?? [];
 
   //   const [acts, setActs] = React.useState([
   //     {
