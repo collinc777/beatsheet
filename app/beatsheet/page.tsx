@@ -105,9 +105,24 @@ export default function Page() {
     });
     setActs(newActs);
   };
+
+  const updateBeat = async (id: string, newBeat: Beat) => {
+    const newActs = [...acts];
+    newActs.forEach((act) => {
+      act.beats = act.beats.map((beat) => {
+        if (beat.id === id) {
+          return newBeat;
+        }
+        return beat;
+      });
+    });
+    console.log({ newActs });
+    setActs(newActs);
+  };
   return (
     <PageView
       acts={acts}
+      updateBeat={updateBeat}
       deleteBeat={deleteBeat}
       addActAtPosition={addActAtPosition}
       deleteAct={deleteAct}
@@ -134,11 +149,13 @@ type Act = {
  */
 function PageView({
   acts,
+  updateBeat,
   addActAtPosition,
   deleteAct,
   addBeat,
   deleteBeat,
 }: {
+  updateBeat: any;
   deleteBeat: any;
   acts: Act[];
   addActAtPosition: any;
@@ -155,6 +172,7 @@ function PageView({
               <ActView
                 deleteBeat={deleteBeat}
                 addBeat={addBeat}
+                updateBeat={updateBeat}
                 act={act}
                 key={act.title}
                 handleDeleteAct={() => {
@@ -234,11 +252,26 @@ function BeatForm({
   );
 }
 
-function BeatView({ beat, handleDelete }: { beat: Beat; handleDelete: any }) {
+function BeatView({
+  beat,
+  handleDelete,
+  updateBeat,
+}: {
+  beat: Beat;
+  handleDelete: any;
+  updateBeat: any;
+}) {
   // todo - incorporate all of the beat info
   const [editMode, setEditMode] = React.useState(false);
   return (
     <div className="bg-[#2d2f48] p-4 rounded-lg">
+      {editMode && (
+        <UpdateBeatForm
+          beat={beat}
+          updateBeat={updateBeat}
+          setEditMode={setEditMode}
+        />
+      )}
       <p>{beat.description}</p>
       <p>Camera Angle: {beat.cameraAngle}</p>
       <p>durationSeconds: {beat.durationSeconds}</p>
@@ -262,14 +295,67 @@ function BeatView({ beat, handleDelete }: { beat: Beat; handleDelete: any }) {
   );
 }
 
+function UpdateBeatForm({
+  beat,
+  updateBeat,
+  setEditMode,
+}: {
+  beat: Beat;
+  updateBeat: any;
+  setEditMode: any;
+}) {
+  const [description, setDescription] = React.useState(beat.description);
+  const [duration, setDuration] = React.useState(beat.durationSeconds);
+  const [cameraAngle, setCameraAngle] = React.useState(beat.cameraAngle);
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Duration"
+        value={duration}
+        onChange={(e) => setDuration(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Camera Angle"
+        value={cameraAngle}
+        onChange={(e) => setCameraAngle(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          console.log("Does this get clicked");
+          await updateBeat(beat.id, {
+            description,
+            durationSeconds: duration,
+            cameraAngle,
+            id: beat.id,
+          });
+          setEditMode(false);
+        }}
+      >
+        Update
+      </button>
+    </div>
+  );
+}
+
 function ActView({
   act,
   handleDeleteAct,
+  updateBeat,
   addBeat,
   deleteBeat,
 }: {
   act: Act;
   handleDeleteAct: any;
+  updateBeat: any;
   addBeat: any;
   deleteBeat: any;
 }) {
@@ -286,7 +372,11 @@ function ActView({
         {act.beats.map((beat, idx) => {
           return (
             <>
-              <BeatView beat={beat} handleDelete={deleteBeat} />
+              <BeatView
+                beat={beat}
+                handleDelete={deleteBeat}
+                updateBeat={updateBeat}
+              />
               <BeatForm addBeat={addBeat} position={idx + 1} actId={act.id} />
             </>
           );
