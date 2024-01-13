@@ -2,6 +2,8 @@
 import { nanoid } from "nanoid";
 import { createClient } from "@/utils/supabase/client";
 import React, { use, useEffect } from "react";
+import { Input } from "@/shadcn/ui/input";
+import { Button } from "@/shadcn/ui/button";
 export type Beat = {
   description: string;
   durationSeconds: number;
@@ -140,22 +142,22 @@ function AddAct({
   const [title, setTitle] = React.useState("");
   return (
     <div>
-      <input
+      <Input
         type="text"
         onChange={(e) => {
           setTitle(e.target.value);
         }}
         placeholder="Act Title"
         autoFocus
-        className="text-black"
       />
-      <button
+      <Button
+        variant={"secondary"}
         onClick={async () => {
           await addActAtPosition(position, title);
         }}
       >
         Add
-      </button>
+      </Button>
     </div>
   );
 }
@@ -175,19 +177,19 @@ function BeatForm({
 
   return (
     <div>
-      <input
+      <Input
         type="text"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <input
+      <Input
         type="text"
         placeholder="Duration"
         value={duration}
         onChange={(e) => setDuration(e.target.value)}
       />
-      <input
+      <Input
         type="text"
         placeholder="Camera Angle"
         value={cameraAngle}
@@ -271,19 +273,19 @@ function UpdateBeatForm({
 
   return (
     <div>
-      <input
+      <Input
         type="text"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <input
+      <Input
         type="text"
         placeholder="Duration"
         value={duration}
         onChange={(e) => setDuration(e.target.value)}
       />
-      <input
+      <Input
         type="text"
         placeholder="Camera Angle"
         value={cameraAngle}
