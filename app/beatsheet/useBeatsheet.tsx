@@ -20,7 +20,7 @@ export const useBeatsheet = (serverActs: Act[]) => {
         (payload) => {
           console.log("does this get called");
           console.log({ payload });
-          setActs(payload.new?.acts);
+          setActs((payload.new as any)?.acts);
         }
       )
       .subscribe();
