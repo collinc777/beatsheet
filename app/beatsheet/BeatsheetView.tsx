@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 import React, { use, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Plus, PlusCircleIcon } from "lucide-react";
 export type Beat = {
   description: string;
   durationSeconds: number;
@@ -104,7 +105,7 @@ export function BeatsheetView({ serverActs }: { serverActs: Act[] }) {
     useBeatsheet(serverActs);
   return (
     <div className="bg-[#1a1c2b] min-h-screen text-white p-8">
-      <div className="grid gap-8">
+      <div>
         {acts.map((act, index) => {
           return (
             <div key={act.title}>
@@ -162,7 +163,7 @@ function AddAct({
   );
 }
 
-function BeatForm({
+function AddBeat({
   addBeat,
   position,
   actId,
@@ -171,14 +172,31 @@ function BeatForm({
   position: number;
   actId: string;
 }) {
+  const [showForm, setShowForm] = React.useState(false);
   const [description, setDescription] = React.useState("");
   const [duration, setDuration] = React.useState("");
   const [cameraAngle, setCameraAngle] = React.useState("");
+  if (!showForm) {
+    return (
+      <div className="flex flex-col justify-center p-3">
+        <Button
+          variant={"success"}
+          size={"icon"}
+          onClick={() => {
+            setShowForm(true);
+          }}
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>
       <Input
         type="text"
+        autoFocus
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
@@ -196,6 +214,7 @@ function BeatForm({
         onChange={(e) => setCameraAngle(e.target.value)}
       />
       <Button
+        variant={"secondary"}
         onClick={() => {
           addBeat(
             {
@@ -248,6 +267,7 @@ function BeatView({
           Edit
         </Button>
         <Button
+          variant={"destructive"}
           onClick={() => {
             handleDelete(beat.id);
           }}
@@ -328,10 +348,12 @@ function ActView({
         <div className="bg-[#6f42c1] text-2xl font-bold px-4 py-1 rounded-l-full">
           {act.title}
         </div>
-        <Button onClick={handleDeleteAct}>Delete</Button>
+        <Button variant={"destructive"} onClick={handleDeleteAct}>
+          Delete
+        </Button>
       </div>
-      <div className="grid grid-cols-6 gap-4">
-        <BeatForm addBeat={addBeat} position={0} actId={act.id} />
+      <div className="flex">
+        <AddBeat addBeat={addBeat} position={0} actId={act.id} />
         {act.beats.map((beat, idx) => {
           return (
             <>
@@ -341,7 +363,7 @@ function ActView({
                 handleDelete={deleteBeat}
                 updateBeat={updateBeat}
               />
-              <BeatForm
+              <AddBeat
                 key={beat.id}
                 addBeat={addBeat}
                 position={idx + 1}
