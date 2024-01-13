@@ -2,7 +2,7 @@ import { BeatsheetView } from "@/app/beatsheet/BeatsheetView";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import React from "react";
-import type { Act, Beat } from "@/app/beatsheet/BeatsheetView";
+import type { Act, Beat } from "./types";
 
 export default async function Page() {
   const cookieStore = cookies();
