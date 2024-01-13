@@ -2,8 +2,8 @@
 import { nanoid } from "nanoid";
 import { createClient } from "@/utils/supabase/client";
 import React, { use, useEffect } from "react";
-import { Input } from "@/shadcn/ui/input";
-import { Button } from "@/shadcn/ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 export type Beat = {
   description: string;
   durationSeconds: number;
@@ -195,7 +195,7 @@ function BeatForm({
         value={cameraAngle}
         onChange={(e) => setCameraAngle(e.target.value)}
       />
-      <button
+      <Button
         onClick={() => {
           addBeat(
             {
@@ -210,7 +210,7 @@ function BeatForm({
         }}
       >
         Add
-      </button>
+      </Button>
     </div>
   );
 }
@@ -239,20 +239,21 @@ function BeatView({
       <p>Camera Angle: {beat.cameraAngle}</p>
       <p>durationSeconds: {beat.durationSeconds}</p>
       <div className="flex justify-between">
-        <button
+        <Button
+          variant={"secondary"}
           onClick={() => {
             setEditMode(true);
           }}
         >
           Edit
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => {
             handleDelete(beat.id);
           }}
         >
           Delete
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -291,7 +292,7 @@ function UpdateBeatForm({
         value={cameraAngle}
         onChange={(e) => setCameraAngle(e.target.value)}
       />
-      <button
+      <Button
         onClick={async () => {
           await updateBeat(beat.id, {
             description,
@@ -303,7 +304,7 @@ function UpdateBeatForm({
         }}
       >
         Update
-      </button>
+      </Button>
     </div>
   );
 }
@@ -327,7 +328,7 @@ function ActView({
         <div className="bg-[#6f42c1] text-2xl font-bold px-4 py-1 rounded-l-full">
           {act.title}
         </div>
-        <button onClick={handleDeleteAct}>Delete</button>
+        <Button onClick={handleDeleteAct}>Delete</Button>
       </div>
       <div className="grid grid-cols-6 gap-4">
         <BeatForm addBeat={addBeat} position={0} actId={act.id} />
