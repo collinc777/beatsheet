@@ -52,6 +52,7 @@ function AddAct({
     return (
       <div className="flex flex-col justify-center p-3">
         <Button
+          variant={"success"}
           onClick={() => {
             setShowForm(true);
           }}
