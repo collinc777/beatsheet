@@ -14,7 +14,7 @@ export default async function Page() {
     .select("*")
     .limit(1);
 
-  const acts: Act[] = beatsheets?.[0].acts ?? [];
+  const beatSheet = beatsheets?.[0];
 
   //   const [acts, setActs] = React.useState([
   //     {
@@ -143,5 +143,5 @@ export default async function Page() {
   //       addBeat={addBeat}
   //     />
   //   );
-  return <BeatsheetView serverActs={acts} />;
+  return <BeatsheetView beatSheet={beatSheet} />;
 }

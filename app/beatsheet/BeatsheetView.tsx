@@ -5,16 +5,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, PlusCircleIcon } from "lucide-react";
 import { useBeatsheet } from "./useBeatsheet";
-import { Act, Beat } from "./types";
-export function BeatsheetView({ serverActs }: { serverActs: Act[] }) {
+import { Act, Beat, Beatsheet } from "./types";
+export function BeatsheetView({ beatSheet }: { beatSheet: Beatsheet }) {
+  const serverActs = beatSheet.acts;
   const { addActAtPosition, addBeat, deleteAct, deleteBeat, updateBeat, acts } =
     useBeatsheet(serverActs);
   return (
     <div className="bg-[#1a1c2b] min-h-screen text-white p-8">
       <div>
+        <h1 className="text-3xl font-medium">{beatSheet.title}</h1>
+      </div>
+      <div>
         {acts.map((act, index) => {
           return (
-            <div key={act.title}>
+            <div key={act.title} className="py">
               <AddAct
                 key={act.title}
                 position={index}
@@ -177,7 +181,7 @@ function BeatView({
   // todo - incorporate all of the beat info
   const [editMode, setEditMode] = React.useState(false);
   return (
-    <div className="bg-[#2d2f48] p-4 rounded-lg w-80">
+    <div className="bg-[#2d2f48] p-4 rounded-lg lg:w-80">
       {editMode ? (
         <UpdateBeatForm
           beat={beat}
@@ -227,7 +231,7 @@ function UpdateBeatForm({
   const [cameraAngle, setCameraAngle] = React.useState(beat.cameraAngle);
 
   return (
-    <div>
+    <div className="flex flex-col gap-y-2">
       <Input
         type="text"
         autoFocus
@@ -261,7 +265,14 @@ function UpdateBeatForm({
         >
           Update
         </Button>
-        <Button variant={"secondary"}>Cancel</Button>
+        <Button
+          onClick={() => {
+            setEditMode(false);
+          }}
+          variant={"secondary"}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );
@@ -281,20 +292,23 @@ function ActView({
   deleteBeat: any;
 }) {
   return (
-    <div className="overflow-auto">
-      <div className="flex items-center mb-4 justify-between">
-        <div className="bg-[#6f42c1] text-2xl font-bold px-4 py-1 rounded-l-full">
+    <div>
+      <div className="flex items-center mb-4 justify-between sticky top-0 z-10 bg-[#1a1c2b]">
+        <div className="bg-[#6f42c1] md:text-2xl text-xl font-bold px-4 py-1 rounded-l-full">
           {act.title}
         </div>
         <Button variant={"destructive"} onClick={handleDeleteAct}>
           Delete
         </Button>
       </div>
-      <div className="flex">
+      <div className="flex flex-wrap flex-col sm:flex-row gap-y-4 items-center">
         <AddBeat addBeat={addBeat} position={0} actId={act.id} />
         {act.beats.map((beat, idx) => {
           return (
-            <div className="flex" key={beat.id}>
+            <div
+              className="flex flex-col sm:flex-row items-center"
+              key={beat.id}
+            >
               <BeatView
                 key={beat.id}
                 beat={beat}

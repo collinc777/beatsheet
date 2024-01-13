@@ -11,3 +11,9 @@ export type Act = {
   id: string;
   beats: Beat[];
 };
+
+export type Beatsheet = {
+  id: string;
+  title: string;
+  acts: Act[];
+};
