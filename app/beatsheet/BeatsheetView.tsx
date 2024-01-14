@@ -181,7 +181,7 @@ function BeatView({
   // todo - incorporate all of the beat info
   const [editMode, setEditMode] = React.useState(false);
   return (
-    <div className="bg-[#2d2f48] p-4 rounded-lg lg:w-80">
+    <div className="bg-[#2d2f48] p-4 rounded-lg lg:w-80 w-full sm:w-auto">
       {editMode ? (
         <UpdateBeatForm
           beat={beat}
@@ -306,7 +306,7 @@ function ActView({
         {act.beats.map((beat, idx) => {
           return (
             <div
-              className="flex flex-col sm:flex-row items-center"
+              className="flex flex-col sm:flex-row items-center w-full sm:w-auto"
               key={beat.id}
             >
               <BeatView
