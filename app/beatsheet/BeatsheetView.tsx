@@ -52,6 +52,10 @@ function AddAct({
 }) {
   const [showForm, setShowForm] = React.useState(false);
   const [title, setTitle] = React.useState("");
+  const closeAndReset = () => {
+    setShowForm(false);
+    setTitle("");
+  };
   if (!showForm) {
     return (
       <div className="flex flex-col justify-center p-3">
@@ -77,12 +81,16 @@ function AddAct({
         autoFocus
       />
       <Button
-        variant={"secondary"}
+        variant={"default"}
         onClick={async () => {
           await addActAtPosition(position, title);
+          closeAndReset();
         }}
       >
         Add
+      </Button>
+      <Button variant={"secondary"} onClick={closeAndReset}>
+        Cancel
       </Button>
     </div>
   );
@@ -101,6 +109,12 @@ function AddBeat({
   const [description, setDescription] = React.useState("");
   const [duration, setDuration] = React.useState("");
   const [cameraAngle, setCameraAngle] = React.useState("");
+  const closeAndReset = () => {
+    setShowForm(false);
+    setDescription("");
+    setDuration("");
+    setCameraAngle("");
+  };
   if (!showForm) {
     return (
       <div className="flex flex-col justify-center p-3">
@@ -151,7 +165,7 @@ function AddBeat({
               actId,
               position
             );
-            setShowForm(false);
+            closeAndReset();
           }}
         >
           Add
@@ -159,7 +173,7 @@ function AddBeat({
         <Button
           variant={"secondary"}
           onClick={() => {
-            setShowForm(false);
+            closeAndReset();
           }}
         >
           Cancel
@@ -229,6 +243,12 @@ function UpdateBeatForm({
   const [description, setDescription] = React.useState(beat.description);
   const [duration, setDuration] = React.useState(beat.durationSeconds);
   const [cameraAngle, setCameraAngle] = React.useState(beat.cameraAngle);
+  const closeAndReset = () => {
+    setDescription("");
+    setDuration(0);
+    setCameraAngle("");
+    setEditMode(false);
+  };
 
   return (
     <div className="flex flex-col gap-y-2">
@@ -260,14 +280,14 @@ function UpdateBeatForm({
               cameraAngle,
               id: beat.id,
             });
-            setEditMode(false);
+            closeAndReset();
           }}
         >
           Update
         </Button>
         <Button
           onClick={() => {
-            setEditMode(false);
+            closeAndReset();
           }}
           variant={"secondary"}
         >
